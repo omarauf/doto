@@ -1,8 +1,6 @@
 import { relations, sql } from "drizzle-orm";
 import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { users } from "./auth-schema";
-
-export * from "./auth-schema";
+import { users } from "@/core/auth/schema";
 
 export const todoList = sqliteTable(
   "todo_list",

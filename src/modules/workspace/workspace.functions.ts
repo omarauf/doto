@@ -2,10 +2,9 @@ import { createServerFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
 import { and, asc, count, eq } from "drizzle-orm";
 import { z } from "zod";
-
-import { db } from "@/db";
-import { todo, todoList } from "@/db/schema";
-import { getRequestSession, requireUser } from "@/lib/auth.server";
+import { getRequestSession, requireUser } from "@/core/auth/auth.server";
+import { db } from "@/core/db";
+import { todo, todoList } from "../todo/schema";
 
 export const listColors = [
   "#E76F51",

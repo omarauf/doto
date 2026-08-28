@@ -5,8 +5,8 @@ import { useState } from "react";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import { getSession } from "@/features/workspace/workspace.functions";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/core/auth/auth-client";
+import { getSession } from "@/modules/workspace/workspace.functions";
 
 const loginSearchSchema = z.object({
   redirect: z.string().optional().catch(undefined),

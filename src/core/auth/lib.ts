@@ -1,13 +1,14 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
-import { db } from "@/db";
-import * as schema from "@/db/schema";
-import { env } from "@/env";
+import { env } from "@/config/env";
+import { db } from "../db";
+import { todoList } from "../db/schema";
+import * as schema from "./schema";
 
 export const auth = betterAuth({
   appName: "Doto",
-  baseURL: env.SERVER_URL,
+  baseURL: env.BETTER_AUTH_URL,
   secret: env.BETTER_AUTH_SECRET,
   database: drizzleAdapter(db, {
     provider: "sqlite",
@@ -21,7 +22,7 @@ export const auth = betterAuth({
     user: {
       create: {
         after: async (user) => {
-          await db.insert(schema.todoList).values({
+          await db.insert(todoList).values({
             id: crypto.randomUUID(),
             userId: user.id,
             name: "Inbox",

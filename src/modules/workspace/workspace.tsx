@@ -17,7 +17,7 @@ import type { FormEvent, ReactNode } from "react";
 import { useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import {authClient} from "@/lib/auth-client";
+import { authClient } from "@/core/auth/auth-client";
 import { cn } from "@/lib/utils";
 import type { getWorkspace } from "./workspace.functions";
 import {
