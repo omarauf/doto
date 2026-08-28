@@ -3,7 +3,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { env } from "@/config/env";
 import { db } from "../db";
-import { todoList } from "../db/schema";
+import { collections } from "../db/schema";
 import * as schema from "./schema";
 
 export const auth = betterAuth({
@@ -22,7 +22,7 @@ export const auth = betterAuth({
     user: {
       create: {
         after: async (user) => {
-          await db.insert(todoList).values({
+          await db.insert(collections).values({
             id: crypto.randomUUID(),
             userId: user.id,
             name: "Inbox",

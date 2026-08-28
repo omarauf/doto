@@ -1,16 +1,4 @@
-CREATE TABLE `todo` (
-	`id` text PRIMARY KEY NOT NULL,
-	`list_id` text NOT NULL,
-	`name` text NOT NULL,
-	`completed` integer DEFAULT false NOT NULL,
-	`position` integer DEFAULT 0 NOT NULL,
-	`created_at` integer DEFAULT (cast(unixepoch('subsecond') * 1000 as integer)) NOT NULL,
-	`updated_at` integer DEFAULT (cast(unixepoch('subsecond') * 1000 as integer)) NOT NULL,
-	FOREIGN KEY (`list_id`) REFERENCES `todo_list`(`id`) ON UPDATE no action ON DELETE cascade
-);
---> statement-breakpoint
-CREATE INDEX `todo_list_id_idx` ON `todo` (`list_id`);--> statement-breakpoint
-CREATE TABLE `todo_list` (
+CREATE TABLE `collections` (
 	`id` text PRIMARY KEY NOT NULL,
 	`user_id` text NOT NULL,
 	`name` text NOT NULL,
@@ -21,7 +9,19 @@ CREATE TABLE `todo_list` (
 	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE INDEX `todo_list_user_id_idx` ON `todo_list` (`user_id`);--> statement-breakpoint
+CREATE INDEX `collections_user_id_idx` ON `collections` (`user_id`);--> statement-breakpoint
+CREATE TABLE `todos` (
+	`id` text PRIMARY KEY NOT NULL,
+	`collection_id` text NOT NULL,
+	`name` text NOT NULL,
+	`completed` integer DEFAULT false NOT NULL,
+	`position` integer DEFAULT 0 NOT NULL,
+	`created_at` integer DEFAULT (cast(unixepoch('subsecond') * 1000 as integer)) NOT NULL,
+	`updated_at` integer DEFAULT (cast(unixepoch('subsecond') * 1000 as integer)) NOT NULL,
+	FOREIGN KEY (`collection_id`) REFERENCES `collections`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
+CREATE INDEX `todos_collection_id_idx` ON `todos` (`collection_id`);--> statement-breakpoint
 CREATE TABLE `accounts` (
 	`id` text PRIMARY KEY NOT NULL,
 	`issuer` text NOT NULL,

@@ -1,90 +1,11 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "a241b111-8ab1-426e-b5c2-4d13c12add7d",
+  "id": "b69a15d2-198d-4adc-afb2-a3efe30f12f5",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
-    "todo": {
-      "name": "todo",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "list_id": {
-          "name": "list_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "completed": {
-          "name": "completed",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": false
-        },
-        "position": {
-          "name": "position",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": 0
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(cast(unixepoch('subsecond') * 1000 as integer))"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "(cast(unixepoch('subsecond') * 1000 as integer))"
-        }
-      },
-      "indexes": {
-        "todo_list_id_idx": {
-          "name": "todo_list_id_idx",
-          "columns": ["list_id"],
-          "isUnique": false
-        }
-      },
-      "foreignKeys": {
-        "todo_list_id_todo_list_id_fk": {
-          "name": "todo_list_id_todo_list_id_fk",
-          "tableFrom": "todo",
-          "tableTo": "todo_list",
-          "columnsFrom": ["list_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
-    "todo_list": {
-      "name": "todo_list",
+    "collections": {
+      "name": "collections",
       "columns": {
         "id": {
           "name": "id",
@@ -140,18 +61,97 @@
         }
       },
       "indexes": {
-        "todo_list_user_id_idx": {
-          "name": "todo_list_user_id_idx",
+        "collections_user_id_idx": {
+          "name": "collections_user_id_idx",
           "columns": ["user_id"],
           "isUnique": false
         }
       },
       "foreignKeys": {
-        "todo_list_user_id_users_id_fk": {
-          "name": "todo_list_user_id_users_id_fk",
-          "tableFrom": "todo_list",
+        "collections_user_id_users_id_fk": {
+          "name": "collections_user_id_users_id_fk",
+          "tableFrom": "collections",
           "tableTo": "users",
           "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "todos": {
+      "name": "todos",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "collection_id": {
+          "name": "collection_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "completed": {
+          "name": "completed",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
+        },
+        "position": {
+          "name": "position",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(cast(unixepoch('subsecond') * 1000 as integer))"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(cast(unixepoch('subsecond') * 1000 as integer))"
+        }
+      },
+      "indexes": {
+        "todos_collection_id_idx": {
+          "name": "todos_collection_id_idx",
+          "columns": ["collection_id"],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "todos_collection_id_collections_id_fk": {
+          "name": "todos_collection_id_collections_id_fk",
+          "tableFrom": "todos",
+          "tableTo": "collections",
+          "columnsFrom": ["collection_id"],
           "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"

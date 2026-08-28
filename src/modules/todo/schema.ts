@@ -2,8 +2,8 @@ import { relations, sql } from "drizzle-orm";
 import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { users } from "@/core/auth/schema";
 
-export const todoList = sqliteTable(
-  "todo_list",
+export const collections = sqliteTable(
+  "collections",
   {
     id: text().primaryKey(),
     userId: text()
@@ -20,16 +20,16 @@ export const todoList = sqliteTable(
       .$onUpdate(() => new Date())
       .notNull(),
   },
-  (table) => [index("todo_list_user_id_idx").on(table.userId)],
+  (table) => [index("collections_user_id_idx").on(table.userId)],
 );
 
-export const todo = sqliteTable(
-  "todo",
+export const todos = sqliteTable(
+  "todos",
   {
     id: text().primaryKey(),
-    listId: text()
+    collectionId: text()
       .notNull()
-      .references(() => todoList.id, { onDelete: "cascade" }),
+      .references(() => collections.id, { onDelete: "cascade" }),
     name: text().notNull(),
     completed: integer({ mode: "boolean" }).default(false).notNull(),
     position: integer().default(0).notNull(),
@@ -41,20 +41,20 @@ export const todo = sqliteTable(
       .$onUpdate(() => new Date())
       .notNull(),
   },
-  (table) => [index("todo_list_id_idx").on(table.listId)],
+  (table) => [index("todos_collection_id_idx").on(table.collectionId)],
 );
 
-export const todoListRelations = relations(todoList, ({ one, many }) => ({
+export const collectionsRelations = relations(collections, ({ one, many }) => ({
   user: one(users, {
-    fields: [todoList.userId],
+    fields: [collections.userId],
     references: [users.id],
   }),
-  todos: many(todo),
+  todos: many(todos),
 }));
 
-export const todoRelations = relations(todo, ({ one }) => ({
-  list: one(todoList, {
-    fields: [todo.listId],
-    references: [todoList.id],
+export const todosRelations = relations(todos, ({ one }) => ({
+  list: one(collections, {
+    fields: [todos.collectionId],
+    references: [collections.id],
   }),
 }));
