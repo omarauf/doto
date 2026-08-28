@@ -1,16 +1,17 @@
 import { relations, sql } from "drizzle-orm";
 import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { collections } from "../collection/schema";
+import { users } from "@/core/auth/schema";
+import { todos } from "../todo/schema";
 
-export const todos = sqliteTable(
-  "todos",
+export const collections = sqliteTable(
+  "collections",
   {
     id: text().primaryKey(),
-    collectionId: text()
+    userId: text()
       .notNull()
-      .references(() => collections.id, { onDelete: "cascade" }),
+      .references(() => users.id, { onDelete: "cascade" }),
     name: text().notNull(),
-    completed: integer({ mode: "boolean" }).default(false).notNull(),
+    color: text().notNull(),
     position: integer().default(0).notNull(),
     createdAt: integer({ mode: "timestamp_ms" })
       .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
@@ -20,12 +21,13 @@ export const todos = sqliteTable(
       .$onUpdate(() => new Date())
       .notNull(),
   },
-  (table) => [index("todos_collection_id_idx").on(table.collectionId)],
+  (table) => [index("collections_user_id_idx").on(table.userId)],
 );
 
-export const todosRelations = relations(todos, ({ one }) => ({
-  list: one(collections, {
-    fields: [todos.collectionId],
-    references: [collections.id],
+export const collectionsRelations = relations(collections, ({ one, many }) => ({
+  user: one(users, {
+    fields: [collections.userId],
+    references: [users.id],
   }),
+  todos: many(todos),
 }));

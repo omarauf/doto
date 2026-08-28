@@ -1,21 +1,6 @@
 import { mutationOptions, queryOptions } from "@tanstack/react-query";
 
-import { createTodo, getCollections, getTodos } from "./functions";
-
-export const collectionsQueries = {
-  all: ["collections"],
-  list: () =>
-    queryOptions({
-      queryKey: [...collectionsQueries.all, "list"],
-      queryFn: () => getCollections(),
-      staleTime: 30_000,
-    }),
-
-  create: () =>
-    mutationOptions({
-      mutationKey: [...collectionsQueries.all, "create"],
-    }),
-};
+import { createTodo, getTodos } from "./functions";
 
 export const todosQueries = {
   all: ["todos"],
