@@ -1,4 +1,4 @@
-import { drizzle } from "drizzle-orm/better-sqlite3";
+import { drizzle } from 'drizzle-orm/bun-sqlite';
 import { env } from "@/env.ts";
 import * as schema from "./schema.ts";
 

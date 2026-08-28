@@ -34,4 +34,7 @@
     "source.fixAll.biome": "explicit"
   },
   "editor.defaultFormatter": "biomejs.biome",
+  "cSpell.words": [
+    "Doto"
+  ],
 }

@@ -1,14 +1,35 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { useSuspenseQuery } from "@tanstack/react-query"
+import { createFileRoute, redirect } from "@tanstack/react-router"
+import { z } from "zod"
 
-export const Route = createFileRoute("/")({ component: Home });
+import { Workspace } from "@/features/workspace/workspace"
+import { getSession } from "@/features/workspace/workspace.functions"
+import { workspaceQuery } from "@/features/workspace/workspace.queries"
 
-function Home() {
-  return (
-    <div className="p-8">
-      <h1 className="font-bold text-4xl">Welcome to TanStack Start</h1>
-      <p className="mt-4 text-lg">
-        Edit <code>src/routes/index.tsx</code> to get started.
-      </p>
-    </div>
-  );
+const workspaceSearchSchema = z.object({
+  list: z.string().min(1).max(100).optional().catch(undefined),
+})
+
+export const Route = createFileRoute("/")({
+  validateSearch: (search) => workspaceSearchSchema.parse(search),
+  beforeLoad: async ({ location }) => {
+    const session = await getSession()
+
+    if (!session) {
+      throw redirect({
+        to: "/login",
+        search: { redirect: location.href },
+      })
+    }
+  },
+  loader: ({ context: { queryClient } }) =>
+    queryClient.ensureQueryData(workspaceQuery()),
+  component: WorkspacePage,
+})
+
+function WorkspacePage() {
+  const { data } = useSuspenseQuery(workspaceQuery())
+  const { list } = Route.useSearch()
+
+  return <Workspace data={data} selectedListId={list} />
 }

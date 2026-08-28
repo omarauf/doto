@@ -5,6 +5,7 @@ export const env = createEnv({
   server: {
     SERVER_URL: z.url().optional(),
     DATABASE_URL: z.string().min(1),
+    BETTER_AUTH_SECRET: z.string().min(1),
   },
 
   /**
