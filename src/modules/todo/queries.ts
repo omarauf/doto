@@ -1,6 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 
-import { getWorkspace } from "./workspace.functions";
+import { getWorkspace } from "./functions";
 
 export const workspaceKeys = {
   all: ["workspace"] as const,

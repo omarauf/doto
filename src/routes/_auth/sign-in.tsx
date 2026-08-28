@@ -3,9 +3,9 @@ import { useId } from "react";
 import { z } from "zod";
 import { useAppForm } from "@/components/form";
 import { toast } from "@/components/ui/toast";
+import { getSession } from "@/core/auth/auth.server";
 import { authClient } from "@/core/auth/auth-client";
 import { getError } from "@/lib/error";
-import { getSession } from "@/modules/workspace/workspace.functions";
 
 export const Route = createFileRoute("/_auth/sign-in")({
   beforeLoad: async () => {

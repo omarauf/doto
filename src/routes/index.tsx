@@ -1,17 +1,11 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { z } from "zod";
-
-import { Workspace } from "@/modules/workspace/workspace";
-import { getSession } from "@/modules/workspace/workspace.functions";
-import { workspaceQuery } from "@/modules/workspace/workspace.queries";
-
-const workspaceSearchSchema = z.object({
-  list: z.string().min(1).max(100).optional().catch(undefined),
-});
+import { getSession } from "@/core/auth/auth.server";
 
 export const Route = createFileRoute("/")({
-  validateSearch: (search) => workspaceSearchSchema.parse(search),
+  validateSearch: z.object({
+    list: z.string().min(1).max(100).optional().catch(undefined),
+  }),
   beforeLoad: async () => {
     const session = await getSession();
 
@@ -19,13 +13,11 @@ export const Route = createFileRoute("/")({
       throw redirect({ to: "/sign-in" });
     }
   },
-  loader: ({ context: { queryClient } }) => queryClient.ensureQueryData(workspaceQuery()),
-  component: WorkspacePage,
+  component: Page,
 });
 
-function WorkspacePage() {
-  const { data } = useSuspenseQuery(workspaceQuery());
+function Page() {
   const { list } = Route.useSearch();
 
-  return <Workspace data={data} selectedListId={list} />;
+  return <p>Workspace: {list}</p>;
 }

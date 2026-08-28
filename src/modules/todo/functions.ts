@@ -2,9 +2,9 @@ import { createServerFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
 import { and, asc, count, eq } from "drizzle-orm";
 import { z } from "zod";
-import { getRequestSession, requireUser } from "@/core/auth/auth.server";
+import { requireUser } from "@/core/auth/auth.server";
 import { db } from "@/core/db";
-import { todo, todoList } from "../todo/schema";
+import { todo, todoList } from "./schema";
 
 export const listColors = [
   "#E76F51",
@@ -35,8 +35,6 @@ async function requireOwnedList(listId: string, userId: string) {
 
   return ownedList;
 }
-
-export const getSession = createServerFn({ method: "GET" }).handler(() => getRequestSession());
 
 export const getWorkspace = createServerFn({ method: "GET" }).handler(async () => {
   const user = await requireUser();
