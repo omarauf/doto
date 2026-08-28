@@ -12,14 +12,11 @@ const workspaceSearchSchema = z.object({
 
 export const Route = createFileRoute("/")({
   validateSearch: (search) => workspaceSearchSchema.parse(search),
-  beforeLoad: async ({ location }) => {
+  beforeLoad: async () => {
     const session = await getSession();
 
     if (!session) {
-      throw redirect({
-        to: "/login",
-        search: { redirect: location.href },
-      });
+      throw redirect({ to: "/sign-in" });
     }
   },
   loader: ({ context: { queryClient } }) => queryClient.ensureQueryData(workspaceQuery()),

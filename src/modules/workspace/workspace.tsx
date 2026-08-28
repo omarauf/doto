@@ -170,14 +170,14 @@ function ListRail({
   async function handleSignOut() {
     await authClient.signOut();
     queryClient.clear();
-    window.location.assign("/login");
+    window.location.assign("/sign-in");
   }
 
   return (
     <div className="flex h-full min-h-svh flex-col px-5 py-6">
       <div className="flex items-center gap-3 px-2">
         <span className="grid size-10 place-items-center rounded-full bg-[#19342f] text-[#f5eee0] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.1)]">
-          <Check className="size-5 stroke-[3]" />
+          <Check className="size-5 stroke-3" />
         </span>
         <div>
           <p className="font-extrabold text-base uppercase tracking-[0.16em]">Doto</p>
@@ -519,7 +519,7 @@ function TodoRow({
         }}
         onClick={() => onToggle(!todo.completed)}
       >
-        {todo.completed && <Check className="size-3.5 stroke-[3]" />}
+        {todo.completed && <Check className="size-3.5 stroke-3" />}
       </button>
       <p
         className={cn(
