@@ -4,7 +4,7 @@ import { getSession } from "@/core/auth/auth.server";
 
 export const Route = createFileRoute("/")({
   validateSearch: z.object({
-    list: z.string().min(1).max(100).optional().catch(undefined),
+    collectionId: z.string().min(1).max(100).optional().catch(undefined),
   }),
   beforeLoad: async () => {
     const session = await getSession();
@@ -17,7 +17,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Page() {
-  const { list } = Route.useSearch();
+  const { collectionId } = Route.useSearch();
 
-  return <p>Workspace: {list}</p>;
+  return <p>Collection Id: {collectionId}</p>;
 }
