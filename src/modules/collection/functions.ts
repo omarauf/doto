@@ -3,6 +3,7 @@ import { asc, count, eq } from "drizzle-orm";
 import { z } from "zod";
 import { requireUser } from "@/core/auth/auth.server";
 import { db } from "@/core/db";
+import { todos } from "../todo/schema";
 import { colors } from "./constant";
 import { collections } from "./schema";
 import { requireOwnedCollection } from "./service";
@@ -19,9 +20,12 @@ export const getCollections = createServerFn({ method: "GET" }).handler(async ()
       name: collections.name,
       color: collections.color,
       position: collections.position,
+      todoCount: count(todos.id),
     })
     .from(collections)
+    .leftJoin(todos, eq(todos.collectionId, collections.id))
     .where(eq(collections.userId, user.id))
+    .groupBy(collections.id)
     .orderBy(asc(collections.position), asc(collections.createdAt));
 
   return {
