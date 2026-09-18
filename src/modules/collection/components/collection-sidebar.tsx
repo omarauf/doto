@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/toast";
-import { authClient } from "@/core/auth/auth-client";
+import { authClient } from "@/core/auth/lib.client";
 import { getError } from "@/lib/error";
 import { cn } from "@/lib/utils";
 import { colors } from "../constant";

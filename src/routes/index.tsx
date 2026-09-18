@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
-import { getSession } from "@/core/auth/auth.server";
+import { getSession } from "@/core/auth/auth.functions";
 import { CollectionSidebar } from "@/modules/collection/components/collection-sidebar";
 import { collectionsQueries } from "@/modules/collection/queries";
 import { TodoList } from "@/modules/todo/components/todo-list";

@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { setResponseStatus } from "@tanstack/react-start/server";
 import { and, asc, count, eq } from "drizzle-orm";
 import { z } from "zod";
-import { requireUser } from "@/core/auth/auth.server";
+import { authMiddleware } from "@/core/auth/middleware";
 import { db } from "@/core/db";
 import { collections } from "../collection/schema";
 import { requireOwnedCollection } from "../collection/service";
@@ -12,9 +12,10 @@ const idSchema = z.string().min(1).max(100);
 const todoNameSchema = z.string().trim().min(1).max(160);
 
 export const getTodos = createServerFn({ method: "GET" })
+  .middleware([authMiddleware])
   .validator(z.object({ collectionId: z.string() }))
-  .handler(async ({ data: { collectionId } }) => {
-    const user = await requireUser();
+  .handler(async ({ context, data: { collectionId } }) => {
+    const { user } = context.session;
 
     const data = await db
       .select({
@@ -36,9 +37,10 @@ export const getTodos = createServerFn({ method: "GET" })
   });
 
 export const createTodo = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
   .validator(z.object({ collectionId: idSchema, name: todoNameSchema }))
-  .handler(async ({ data }) => {
-    const user = await requireUser();
+  .handler(async ({ context, data }) => {
+    const { user } = context.session;
     await requireOwnedCollection(data.collectionId, user.id);
 
     const [{ value: todoCount }] = await db
@@ -59,14 +61,15 @@ export const createTodo = createServerFn({ method: "POST" })
   });
 
 export const toggleTodo = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
   .validator(
     z.object({
       todoId: idSchema,
       completed: z.boolean(),
     }),
   )
-  .handler(async ({ data }) => {
-    const user = await requireUser();
+  .handler(async ({ context, data }) => {
+    const { user } = context.session;
     const ownedTodo = (
       await db
         .select({ id: todos.id })
@@ -87,9 +90,10 @@ export const toggleTodo = createServerFn({ method: "POST" })
   });
 
 export const deleteTodo = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
   .validator(z.object({ todoId: idSchema }))
-  .handler(async ({ data }) => {
-    const user = await requireUser();
+  .handler(async ({ context, data }) => {
+    const { user } = context.session;
     const ownedTodo = (
       await db
         .select({ id: todos.id })
