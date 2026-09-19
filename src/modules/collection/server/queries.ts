@@ -1,6 +1,6 @@
 import { mutationOptions, queryOptions } from "@tanstack/react-query";
 
-import type { colors } from "./constant";
+import type { colors } from "../constant";
 import { createCollection, deleteCollection, getCollections } from "./functions";
 
 export const collectionsQueries = {

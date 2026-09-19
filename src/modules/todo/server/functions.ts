@@ -4,8 +4,8 @@ import { and, asc, count, eq } from "drizzle-orm";
 import { z } from "zod";
 import { authMiddleware } from "@/core/auth/middleware";
 import { db } from "@/core/db";
-import { collections } from "../collection/schema";
-import { requireOwnedCollection } from "../collection/service";
+import { collections } from "../../collection/server/schema";
+import { requireOwnedCollection } from "../../collection/server/service";
 import { todos } from "./schema";
 
 const idSchema = z.string().min(1).max(100);

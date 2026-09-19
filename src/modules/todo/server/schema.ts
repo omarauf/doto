@@ -1,6 +1,6 @@
 import { relations, sql } from "drizzle-orm";
 import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { collections } from "../collection/schema";
+import { collections } from "../../collection/server/schema";
 
 export const todos = sqliteTable(
   "todos",

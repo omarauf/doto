@@ -3,8 +3,8 @@ import { asc, count, eq } from "drizzle-orm";
 import { z } from "zod";
 import { authMiddleware } from "@/core/auth/middleware";
 import { db } from "@/core/db";
-import { todos } from "../todo/schema";
-import { colors } from "./constant";
+import { todos } from "../../todo/server/schema";
+import { colors } from "../constant";
 import { collections } from "./schema";
 import { requireOwnedCollection } from "./service";
 
