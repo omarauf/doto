@@ -9,11 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as MainRouteRouteImport } from './routes/_main/route'
 import { Route as AuthSignInRouteImport } from './routes/_auth/sign-in'
 import { Route as AuthSignUpRouteImport } from './routes/_auth/sign-up'
 import { Route as MainIndexRouteImport } from './routes/_main/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
+const MainRouteRoute = MainRouteRouteImport.update({
+  id: '/_main',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthSignInRoute = AuthSignInRouteImport.update({
   id: '/_auth/sign-in',
   path: '/sign-in',
@@ -25,9 +30,9 @@ const AuthSignUpRoute = AuthSignUpRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const MainIndexRoute = MainIndexRouteImport.update({
-  id: '/_main/',
+  id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => MainRouteRoute,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
@@ -36,9 +41,9 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof MainIndexRoute
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
-  '/': typeof MainIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
@@ -49,6 +54,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/_main': typeof MainRouteRouteWithChildren
   '/_auth/sign-in': typeof AuthSignInRoute
   '/_auth/sign-up': typeof AuthSignUpRoute
   '/_main/': typeof MainIndexRoute
@@ -56,22 +62,34 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/sign-in' | '/sign-up' | '/' | '/api/auth/$'
+  fullPaths: '/' | '/sign-in' | '/sign-up' | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
   to: '/sign-in' | '/sign-up' | '/' | '/api/auth/$'
   id:
-    '__root__' | '/_auth/sign-in' | '/_auth/sign-up' | '/_main/' | '/api/auth/$'
+    | '__root__'
+    | '/_main'
+    | '/_auth/sign-in'
+    | '/_auth/sign-up'
+    | '/_main/'
+    | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  MainRouteRoute: typeof MainRouteRouteWithChildren
   AuthSignInRoute: typeof AuthSignInRoute
   AuthSignUpRoute: typeof AuthSignUpRoute
-  MainIndexRoute: typeof MainIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_main': {
+      id: '/_main'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof MainRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_auth/sign-in': {
       id: '/_auth/sign-in'
       path: '/sign-in'
@@ -91,7 +109,7 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof MainIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof MainRouteRoute
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -103,10 +121,22 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface MainRouteRouteChildren {
+  MainIndexRoute: typeof MainIndexRoute
+}
+
+const MainRouteRouteChildren: MainRouteRouteChildren = {
+  MainIndexRoute: MainIndexRoute,
+}
+
+const MainRouteRouteWithChildren = MainRouteRoute._addFileChildren(
+  MainRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
+  MainRouteRoute: MainRouteRouteWithChildren,
   AuthSignInRoute: AuthSignInRoute,
   AuthSignUpRoute: AuthSignUpRoute,
-  MainIndexRoute: MainIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport

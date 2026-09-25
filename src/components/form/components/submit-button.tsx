@@ -8,12 +8,19 @@ type SubmitButtonProps = {
   className?: string;
   variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
   disabled?: boolean;
+  form?: string;
 };
 
-export function SubmitButton({ children, variant, className, disabled }: SubmitButtonProps) {
-  const form = useFormContext();
+export function SubmitButton({
+  children,
+  variant,
+  className,
+  disabled,
+  formId,
+}: SubmitButtonProps & { formId?: string }) {
+  const formContext = useFormContext();
 
-  const [isSubmitting, canSubmit] = useStore(form.store, (state) => [
+  const [isSubmitting, canSubmit] = useStore(formContext.store, (state) => [
     state.isSubmitting,
     state.canSubmit,
   ]);
@@ -21,6 +28,7 @@ export function SubmitButton({ children, variant, className, disabled }: SubmitB
   return (
     <Button
       type="submit"
+      form={formId}
       className={className}
       variant={variant}
       disabled={disabled || isSubmitting || !canSubmit}
